@@ -1,0 +1,263 @@
+{% extends 'app/main.html' %}
+{% load static %}
+
+{% block title %} {{ request.user }} | page  {% endblock title %}
+
+
+{% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+        <p class="text-center">{{ message }}</p>
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        {% endfor%}
+    {% endif %}
+
+    <div class="row mt-4">
+        <div class="col-sm-12 m-2">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="text-center fw-bolder">Manage Todos</h3>
+                </div>
+
+                <div class="card-body">
+            {% if todos %}
+                    {% for todo in todos %}
+                    
+
+                        <div class="row" id="span-row">
+                            <span class="col-7"  id="span-1">
+                              <p class="fw-bolder text-break">{{ todo.title }} </p>
+
+                              {% if todo.description %}
+                                   <a href="" class="d-flex" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ todo.id }}"><i>See more...</i></a>
+                              {% endif %}
+                            </span>
+
+                            <span class="col-5 text-center" id="span-2"> 
+                                <span class="row text-center">
+
+                                    <span class="col-2">
+                                        <!-- veiw modal -->
+                                            <div class="row">
+                                                <div class="modal fade" id="staticBackdrop{{ todo.id }}" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header bg-secondary text-light" >
+                                                            <h5 class="modal-title fw-bolder text-center" id="staticBackdropLabel">View | {{ todo.title }}</h5>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        
+                                                        <div class="">
+                                                        
+                                                            {% if not todo.description %}
+                                                                <p class="fw-bold">No Description to view.</p>
+                                                            {% else %}
+                                                                <p class="fw-bold">{{ todo.description }}</p>
+                                                            {% endif %}
+
+                                                        </div>
+                                                    <div class="modal-footer">
+                                                        {% if todo.completed == False %}
+                                                            <span class="text-danger">Not Completed</span>
+                                                        {% else %}
+                                                            <span class="text-success">Completed</span>
+                                                        {% endif %}
+                                                        <span class="fw-bolder">{{ todo.created }}</span>
+                                                        <span>
+                                                            
+                                                            <button type="button" class="btn btn-danger mb-1" data-bs-dismiss="modal">Close</button>
+                                                            
+                                                        </span>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <!-- end of veiw modal -->
+
+                                            <a id="veiw-btn"><img src="{% static 'app/img/eye.svg' %}" alt="" data-bs-toggle="modal" data-bs-target="#staticBackdrop{{ todo.id }}"></a>
+                                        </span>
+
+                                    <span class="col-2"></span>
+
+                                    <span class="col-2">
+                                        
+                                <!-- edit modal -->
+
+                                <div class="row">
+                                        
+                                    <div class="modal fade" tabindex="-1" id="myModal{{todo.id}}1">
+                                        <div class="modal-dialog modal-md">
+                                            <div class="modal-content" >
+                                                <div class="modal-header" id="modal-header">
+                                                    <h3 class="modal-title fw-bolder">
+                                                        Edit | {{ todo.title }}
+                                                    </h3>
+                                                    <button type="button" class=" btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+
+                                                <div class="modal-body" style="text-align: center; color: black;">
+                                                    <ol class="list-group list-group">
+                                                        <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                        <div class="ms-2 me-auto">
+                                                                                
+                                                            <form action="" method="post">
+                                                                {% csrf_token %}
+
+                                                                <span>Title: <input type="text" placeholder="{{todo.title}}" name="title" id="" value="{{todo.title}}" class="form-control w-100"></span>
+                                                                <span>Description: <textarea name="description" placeholder="{{todo.description}}" id="" cols="30" rows="10" class="form-control">{{todo.description}}</textarea></span>
+                                                                
+                                                                {% if todo.completed == True %}
+                                                                <p>Completed: </br>Yes<input type="radio" value="1" name="completed" id="" checked=True class="form-check-input"> No: <input type="radio" value="0" name="completed" id="" class="form-check-input"></p>
+
+                                                                {% else %}
+                                                                <p>Completed: </br>Yes<input type="radio" value="1" name="completed" id="" class="form-check-input"> No: <input type="radio" value="0" name="completed" id="" checked=True class="form-check-input"></p>
+
+                                                                {% endif %}
+                                                                
+                                                                {% if todo.completed == "" or todo.completed == None %}
+                                                                dd<p>Completed: </br>Yes<input type="radio" value="{{todo.completed}}" name="completed" id="" class="form-check-input"> No: <input class="form-check-input" type="radio" value="{{todo.completed}}" name="completed" id="" checked=True></p>
+                                                                {% endif %}
+                                                                <input type="submit" class="btn btn-success mt-4" value="Update {{ todo.id }}" name="edit">
+                                                            </form>
+                                                        </div>
+                                                        <i class="bi bi-bookmark-star-fill fs-1" style="color: gold;"></i>
+                                                        </li>
+                                                    </ol>
+                                                </div>
+
+                                                <div class="modal-footer" id="modal-footer">
+                                                    <button type="button" class="btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            <!-- end of edit modal -->
+                                           
+                                        <a id="veiw-btn"><img src="{% static 'app/img/edit.svg' %}" alt="" data-bs-toggle="modal" data-bs-target="#myModal{{ todo.id }}1"></a>
+                                        
+                                    </span>
+
+                                    <span class="col-2"></span>
+
+                                    <span class="col-2">
+
+
+                                            <!-- delete modal -->
+
+                                            <div class="row">
+                                                    
+                                                <div class="modal fade position relative top-0 start-0" tabindex="-1" id="myModal{{todo.id}}">
+                                                    <div class="modal-dialog modal-md">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header" id="modal-header">
+                                                                <h3 class="modal-title fw-bolder  text-dark">
+                                                                    Delete
+                                                                </h3>
+                                                                <button type="button" class=" btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+
+                                                            <div class="modal-body text-center">
+                                                                <ol class="list-group list-group">
+                                                                    <li class="list-group-item d-flex justify-content-between align-items-start">
+                                                                    <div class="ms-2 me-auto ">
+                                                                                            
+                                                                        <form action="" method="post">
+                                                                            {% csrf_token %}
+                                                                            <h4 class="fw-bold">Confirm to Remove <i> "{{ todo.title }}"</i></h4>
+                                                                            <button type="button" class="btn btn-primary mt-4" data-bs-dismiss="modal" aria-label="Close">Cancel</button>
+                                                                            
+                                                                            <input type="submit" class="btn btn-danger mt-4" value="Confirm {{todo.id}}" name="confirm">
+                                                                        
+                                                                        </form>
+                                                                    </div>
+                                                                       
+                                                                    </li>
+                                                                </ol>
+                                                            </div>
+
+                                                            <div class="modal-footer" id="modal-footer">
+                                                                <button type="button" class="btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                            <!-- end of delete modal -->
+                                        <a id="veiw-btn"><img src="{% static 'app/img/delete.svg' %}" alt="" data-bs-toggle="modal" data-bs-target="#myModal{{ todo.id }}"></a>
+                                    </span>
+                                </span>
+                            </span>
+                            
+                        </div>
+                        <br>
+                        {% endfor %}
+                    {% else %}
+                            <div class="text-center">
+                    <!--        <img srcset="{% static 'app/img/Angry man.svg' %} 120w,
+                                {% static 'app/img/Angry man.svg' %} 193w,
+                                {% static 'app/img/Angry man.svg' %} 278w"
+                 sizes="(max-width: 710px) 55px,
+                        (max-width: 991px) 53px,
+                        100px"> -->
+            
+                                <img src="{% static 'app/img/Angry man.svg' %}" alt="" width="45%" height="45%">
+                                    <h4 class="text-break text-center text-danger">Todo List is Empty, Click the Button below to add.</h4>
+    
+                            </div>
+                      {% endif %}
+
+                </div>
+            </div>
+        </div>
+    </div>
+  
+
+<!-- form modal -->
+
+<div class="row">
+   <div class="modal fade position relative top-0 start-0" tabindex="-1" id="myModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header" id="modal-header">
+                    <h3 class="modal-title fw-bolder text-dark">Add</h3>
+                    <button type="button" class="btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+
+            <div class="modal-body" style="text-align: center; color: black;">
+               <form action="" method="post" novalidate>
+                   {% csrf_token %}
+
+                        <div class="mb-2">
+                            {{add_form}}
+                        </div>
+
+                        <input type="submit" name="add" value="Add" class="form-control btn-success">
+               </form>
+            </div>
+
+            <div class="modal-footer" id="modal-footer">
+
+
+            <button type="button" class="btn-dark btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+
+            </div>
+        </div>
+        </div>
+    </div>
+   </div>
+ </div>  
+</div>
+
+    <div class="position-fixed bottom-0 start-0 m-3 p-2">
+        <a style="border-radius:30%;" class="position-relative btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#myModal"><img class="text-success" src="{% static 'app/img/plus.svg' %}" alt="" width="50"></a>
+    </div>
+<!-- end of form modal -->
+
+{%  endblock content %}

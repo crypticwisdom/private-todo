@@ -1,0 +1,49 @@
+a{
+    text-decoration: none;
+}
+
+#span-1{
+    background-color: rgb(236, 236, 236);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding:10px;
+  
+}
+
+#span-1:hover{
+    background-color: rgb(204, 204, 204);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding:10px;
+    border:none;
+}
+
+#span-2{
+    background-color: rgb(247, 247, 247);
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    padding:10px;
+   
+}
+
+#span-2:hover{
+    background-color: rgb(204, 204, 204);
+    padding:10px;
+   
+}
+
+#modal-header, #modal-footer{
+    background-color: rgb(204, 204, 204);
+}
+
+#veiw-btn{
+    border:none;
+    background-color: transparent;
+    margin-left: -8px;
+}
+
+#veiw-btn:hover{
+    border:none;
+    margin-left: -8px;
+    background-color: transparent;
+}
